@@ -1,0 +1,22 @@
+start_date: "2018-01-01"
+end_date: "2025-12-31"
+initial_capital: 1000000
+transaction_cost_bps: 5
+risk_free_rate: 0.02
+
+strategy_params:
+  equal_weight: {}
+  momentum_rotation:
+    lookback_days: 126
+    top_k: 3
+  volatility_target:
+    target_annual_vol: 0.12
+    max_leverage: 1.5
+
+evaluator_weights:
+  sharpe_score: 0.30
+  calmar_score: 0.20
+  return_score: 0.15
+  drawdown_penalty: 0.20
+  cvar_penalty: 0.10
+  turnover_penalty: 0.05
