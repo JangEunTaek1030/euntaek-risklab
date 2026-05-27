@@ -15,7 +15,7 @@ class MomentumRotationStrategy(BaseStrategy):
 
     def generate_weights(self, returns: pd.DataFrame) -> pd.DataFrame:
         momentum = (1 + returns).rolling(self.lookback_days).apply(np.prod, raw=True) - 1
-        rebalance_dates = returns.resample("M").last().index
+        rebalance_dates = returns.groupby(returns.index.to_period("M")).tail(1).index
 
         weights = pd.DataFrame(0.0, index=returns.index, columns=returns.columns)
         current_weights = pd.Series(0.0, index=returns.columns)

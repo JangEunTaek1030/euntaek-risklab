@@ -1,6 +1,11 @@
 from __future__ import annotations
 
 from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 import pandas as pd
 import yaml
@@ -24,9 +29,6 @@ from src.reporting.summary import save_best_summary, save_leaderboard
 from src.strategies.equal_weight import EqualWeightStrategy
 from src.strategies.momentum_rotation import MomentumRotationStrategy
 from src.strategies.volatility_target import VolatilityTargetStrategy
-
-
-ROOT = Path(__file__).resolve().parents[1]
 
 
 def load_yaml(path: Path) -> dict:
@@ -79,7 +81,7 @@ def main() -> None:
 
         portfolio_returns = result["portfolio_returns"]
         metrics = compute_metrics(portfolio_returns, float(result["average_turnover"]), float(config["risk_free_rate"]))
-        score_details = score_strategy(metrics)
+        score_details = score_strategy(metrics, config.get("evaluator_weights"))
         constraints = basic_metric_constraints(metrics)
 
         row = {"strategy": strategy.name, **metrics, **score_details}
@@ -96,7 +98,9 @@ def main() -> None:
     save_best_summary(leaderboard.iloc[0], output_dir)
     save_curve_tables(pd.DataFrame(equity_curves), pd.DataFrame(drawdown_curves), output_dir)
 
+    best = leaderboard.iloc[0]
     print("Baseline run complete. Reports saved to ./reports")
+    print(f"Best strategy: {best['strategy']} | Final score: {best['final_score']:.4f}")
 
 
 if __name__ == "__main__":
