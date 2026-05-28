@@ -76,6 +76,38 @@ python scripts/generate_ai_memo.py
 Stage 3 output:
 - `reports/ai_institutional_risk_memo.md` — AI-written institutional risk memo based only on deterministic Stage 2 reports
 
+
+## Stage 4: Streamlit Product Dashboard
+Stage 4 productizes the saved Stage 1, Stage 2, and Stage 3 report artifacts into a PM-oriented Streamlit dashboard. The dashboard is designed to make the evaluator-driven workflow understandable to non-technical users: it visualizes deterministic leaderboards, evolution progress, risk curves, strategy summaries, and the AI-written memo after evaluation is complete.
+
+The dashboard does **not** add strategy logic, change evaluator logic, predict prices, or provide investment advice. It only reads and displays files already generated in `reports/`.
+
+Run Stage 4 with either command:
+```bash
+streamlit run app/streamlit_app.py
+# or
+python scripts/run_dashboard.py
+```
+
+Dashboard sections:
+- Header, subtitle, and educational/research-only disclaimer
+- Workflow overview for deterministic evaluation, agentic strategy evolution, and AI memo generation
+- Baseline strategy leaderboard with best baseline metrics
+- Evolution leaderboard with best evolved candidate details
+- Evolution progress by round, including best score and candidate count
+- Equity and drawdown risk curves
+- Best evolved strategy summary
+- AI institutional risk memo generated only after deterministic evaluation is complete
+
+If report files are missing, the dashboard shows warnings with the script needed to generate them:
+```bash
+python scripts/run_baseline.py
+python scripts/run_evolution.py
+python scripts/generate_ai_memo.py
+```
+
+As with the rest of Euntaek RiskLab, this dashboard is educational and research-oriented only. It is not investment advice, not a stock prediction bot, and not a trading recommendation system.
+
 ## Baseline strategies
 - Equal Weight
 - Momentum Rotation (monthly top-k by trailing return)
@@ -85,4 +117,4 @@ Stage 3 output:
 1. **Stage 1**: Deterministic risk evaluation (current)
 2. **Stage 2**: Agentic strategy evolution
 3. **Stage 3**: AI-generated institutional risk memo
-4. **Stage 4**: Streamlit dashboard
+4. **Stage 4**: Streamlit dashboard (current)
