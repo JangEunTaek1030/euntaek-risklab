@@ -30,6 +30,23 @@ Important principles:
 - LLMs do **not** decide strategy quality.
 - Strategy quality is evaluated by deterministic backtests and explicit risk metrics.
 
+
+## Project Architecture
+Euntaek RiskLab is organized as a deterministic evaluation pipeline with an optional AI reporting layer:
+
+- **Data layer**: loads and validates market data and asset-universe configuration before any strategy is tested.
+- **Strategy layer**: defines baseline and parameterized portfolio-risk-control strategies, including equal weight, momentum rotation, and volatility targeting.
+- **Backtest engine**: runs each strategy against the same historical data path so results are comparable and reproducible.
+- **Risk evaluator**: calculates explicit metrics such as Sharpe, Calmar, max drawdown, CVaR, turnover, and constraint checks, then applies a transparent scoring formula.
+- **Evolution loop**: generates candidate configurations, evaluates them, selects stronger candidates, mutates parameters, and repeats using deterministic evaluator feedback.
+- **AI memo layer**: converts completed report artifacts into an institutional-style memo after scoring is finished; it does not change rankings or strategy decisions.
+- **Streamlit dashboard**: presents saved leaderboards, risk curves, evolution progress, summaries, and the AI memo for portfolio-ready review.
+
+## PM Interview Pitch
+Euntaek RiskLab demonstrates how a financial risk-control problem can be transformed into an evaluator-driven AI workflow: deterministic data and backtests produce explicit risk metrics; those metrics feed evaluator scoring; evaluator feedback drives strategy evolution; the completed results are summarized by an AI-generated memo; and the full workflow is presented in a Streamlit dashboard.
+
+The key product decision is separating evaluation from narration: the deterministic evaluator ranks strategies, while the LLM only helps communicate already-computed results. This makes the workflow auditable, reproducible, and suitable for explaining AI-assisted decision systems without claiming that an AI model predicts markets.
+
 ## Quick start
 ```bash
 pip install -r requirements.txt
@@ -114,7 +131,7 @@ As with the rest of Euntaek RiskLab, this dashboard is educational and research-
 - Volatility Target (target annual vol with leverage cap)
 
 ## Roadmap
-1. **Stage 1**: Deterministic risk evaluation (current)
-2. **Stage 2**: Agentic strategy evolution
-3. **Stage 3**: AI-generated institutional risk memo
-4. **Stage 4**: Streamlit dashboard (current)
+1. **Stage 1**: Deterministic risk evaluation — completed baseline foundation
+2. **Stage 2**: Agentic strategy evolution — completed evaluator-driven search loop
+3. **Stage 3**: AI-generated institutional risk memo — completed reporting layer
+4. **Stage 4**: Streamlit dashboard — current portfolio-ready product interface
