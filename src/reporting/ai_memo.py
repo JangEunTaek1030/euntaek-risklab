@@ -41,14 +41,18 @@ def load_evolution_results(
         },
     }
 
-
 def _safe_markdown_table(frame: pd.DataFrame, max_rows: int = DEFAULT_TOP_ROWS) -> str:
     if frame.empty:
         return "No rows available."
-    display = frame.head(max_rows).astype(str)
+
+    display = frame.head(max_rows).copy()
+    display.columns = [str(column) for column in display.columns]
+    display = display.astype(str)
+
     header = "| " + " | ".join(display.columns) + " |"
     separator = "| " + " | ".join(["---"] * len(display.columns)) + " |"
-    rows = ["| " + " | ".join(row) + " |" for row in display.to_numpy()]
+    rows = ["| " + " | ".join(str(value) for value in row) + " |" for row in display.to_numpy()]
+
     return "\n".join([header, separator, *rows])
 
 
