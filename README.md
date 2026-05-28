@@ -60,6 +60,22 @@ Stage 2 outputs:
 - `reports/evolution_experiment_log.csv` — round-by-round candidate details, metrics, scores, constraints, and mutation lineage
 - `reports/best_evolved_strategy_summary.md` — plain-English summary of the best evolved candidate and why the evaluator selected it
 
+
+## Stage 3: AI-Generated Institutional Risk Memo
+Stage 3 turns the saved Stage 2 deterministic reports into an institutional-style risk memo. The LLM is used only as a report-writing assistant after the evaluator has already completed its backtests, metric calculations, constraints, and explicit score ranking.
+
+The deterministic evaluator still decides strategy quality. The AI memo generator must use only the saved Stage 2 report artifacts as input; it does not predict prices, create trading signals, override evaluator scores, or provide investment advice.
+
+Configure DeepSeek credentials by copying `.env.example` to `.env` and setting `DEEPSEEK_API_KEY`. Do not commit real API keys.
+
+Run Stage 3 with:
+```bash
+python scripts/generate_ai_memo.py
+```
+
+Stage 3 output:
+- `reports/ai_institutional_risk_memo.md` — AI-written institutional risk memo based only on deterministic Stage 2 reports
+
 ## Baseline strategies
 - Equal Weight
 - Momentum Rotation (monthly top-k by trailing return)
